@@ -44,7 +44,7 @@ def build_prompt(hd, question):
 
 
 def call_dashscope(prompt):
-    api_key = os.environ.get("DASHSCOPE_API_KEY", "")
+    api_key = os.environ.get("DASHSCOPE_API_KEY", "").strip()
     url = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"
 
     payload = json.dumps({
