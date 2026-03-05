@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#0a0a12" />
+  <title>梅花易数 · 字占</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/app.css" />
+</head>
+<body>
+  <div id="app">
+
+    <!-- ====== 首页：输入起卦 ====== -->
+    <section id="screen-home" class="screen active">
+      <div class="header">
+        <div class="header-icon">☰</div>
+        <h1>梅花易数</h1>
+        <p class="subtitle">一字知天机 · 字占问卦</p>
+      </div>
+
+      <div class="input-section fade-in">
+        <span class="input-label">输入一个汉字，问当下之事</span>
+
+        <div class="char-input-wrap">
+          <input type="text" class="char-input" id="charInput" maxlength="1" placeholder="写一个字" autocomplete="off" />
+          <div class="stroke-badge" id="strokeBadge">笔画：-</div>
+        </div>
+
+        <div class="stroke-manual" id="strokeManual">
+          <span>未收录此字，请手动输入笔画数：</span>
+          <input type="number" id="manualStroke" min="1" max="64" placeholder="?" />
+        </div>
+
+        <div class="shichen-info">
+          <span>当前时辰</span>
+          <span class="val" id="shichenDisplay">--</span>
+        </div>
+
+        <button type="button" class="btn-divine" id="btnDivine" disabled>起 卦</button>
+      </div>
+
+      <div class="footer">梅花易数 · 邵雍心易法<br/>结果仅供参考，不构成任何决策建议</div>
+    </section>
+
+    <!-- ====== 起卦动画 ====== -->
+    <section id="screen-divining" class="screen screen-divining">
+      <div class="bagua-spinner">
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="center">☯</div>
+      </div>
+      <p class="divining-text" id="diviningText">凝神聚气，起卦中…</p>
+    </section>
+
+    <!-- ====== 结果页 ====== -->
+    <section id="screen-result" class="screen screen-result">
+      <div class="result-header fade-in">
+        <div class="result-char" id="resultChar">-</div>
+        <div class="result-meta" id="resultMeta">-</div>
+      </div>
+
+      <!-- 卦象图形 -->
+      <div class="hexagram-display fade-in" id="hexagramDisplay"></div>
+
+      <!-- 运势 -->
+      <div class="luck-card fade-in" id="luckCard"></div>
+
+      <!-- 卦辞 -->
+      <div class="guaci-section fade-in" id="guaciSection"></div>
+
+      <!-- 体用分析 -->
+      <div class="tiyong-card fade-in" id="tiyongCard"></div>
+
+      <!-- 总结 -->
+      <div class="summary-card fade-in" id="summaryCard"></div>
+
+      <!-- 分类解读 -->
+      <div class="interp-grid fade-in" id="interpGrid"></div>
+
+      <button type="button" class="btn-retry" id="btnRetry">重新起卦</button>
+      <div class="footer">梅花易数 · 邵雍心易法<br/>结果仅供参考，不构成任何决策建议</div>
+    </section>
+
+  </div>
+
+  <script src="js/strokes.js"></script>
+  <script src="js/bagua.js"></script>
+  <script src="js/interpret.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
