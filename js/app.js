@@ -7,16 +7,20 @@
   const $ = (sel) => document.querySelector(sel);
   const $$ = (sel) => document.querySelectorAll(sel);
 
-  const charInput    = $('#charInput');
-  const strokeBadge  = $('#strokeBadge');
-  const strokeManual = $('#strokeManual');
-  const manualStroke = $('#manualStroke');
-  const shichenDisp  = $('#shichenDisplay');
-  const btnDivine    = $('#btnDivine');
-  const btnRetry     = $('#btnRetry');
+  const charInput     = $('#charInput');
+  const questionInput = $('#questionInput');
+  const strokeBadge   = $('#strokeBadge');
+  const strokeManual  = $('#strokeManual');
+  const manualStroke  = $('#manualStroke');
+  const shichenDisp   = $('#shichenDisplay');
+  const btnDivine     = $('#btnDivine');
+  const btnRetry      = $('#btnRetry');
+  const aiCard        = $('#aiCard');
 
   let currentChar = '';
   let currentStroke = null;
+  let lastDivineResult = null;
+  let lastQuestion = '';
 
   // ========== 初始化 ==========
   function init() {
@@ -97,6 +101,7 @@
   // ========== 起卦流程 ==========
   function startDivine() {
     if (!currentChar || !currentStroke) return;
+    lastQuestion = questionInput.value.trim();
     showScreen('screen-divining');
 
     const texts = ['天地感应中…', '阴阳交合…', '卦象初成…', '推演变化…', '解读卦意…'];
@@ -110,9 +115,103 @@
     setTimeout(() => {
       clearInterval(timer);
       const result = divineBySingleChar(currentStroke);
+      lastDivineResult = result;
       renderResult(result);
       showScreen('screen-result');
+
+      if (lastQuestion) {
+        fetchAiInterpretation(result, lastQuestion);
+      }
     }, 2200);
+  }
+
+  // ========== AI 大师解读 ==========
+  function fetchAiInterpretation(result, question) {
+    aiCard.style.display = 'block';
+    aiCard.innerHTML = `
+      <div class="ai-header">
+        <span class="ai-icon">✦</span>
+        <span class="ai-title">清玄大师 · AI 解读</span>
+      </div>
+      <div class="ai-question">所问：${escHtml(question)}</div>
+      <div class="ai-loading">
+        <div class="dots">大师正在凝神解卦…</div>
+      </div>
+    `;
+
+    const payload = {
+      question,
+      hexagramData: {
+        char: currentChar,
+        strokeCount: result.strokeCount,
+        shichen: result.shichen.name + '时',
+        yaoPos: result.yaoPos,
+        benGua: { name: result.benGua.name },
+        bianGua: { name: result.bianGua.name },
+        huGua: { name: result.huGua.name },
+        ti: { name: result.ti.name, nature: result.ti.nature, element: result.ti.element },
+        yong: { name: result.yong.name, nature: result.yong.nature, element: result.yong.element },
+        wuxing: { relation: result.wuxing.relation, desc: result.wuxing.desc },
+      },
+    };
+
+    fetch('/api/divine', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
+      .then(data => {
+        if (data.error) throw new Error(data.error);
+        renderAiResult(data.interpretation, question);
+      })
+      .catch(err => {
+        console.error('AI interpretation failed:', err);
+        renderAiError(question);
+      });
+  }
+
+  function renderAiResult(text, question) {
+    const formatted = text
+      .replace(/【(.+?)】/g, '<span class="section-label">【$1】</span>');
+
+    aiCard.innerHTML = `
+      <div class="ai-header">
+        <span class="ai-icon">✦</span>
+        <span class="ai-title">清玄大师 · AI 解读</span>
+      </div>
+      <div class="ai-question">所问：${escHtml(question)}</div>
+      <div class="ai-body">${formatted}</div>
+      <div class="ai-note">基于卦象与您的问题，由 AI 生成</div>
+    `;
+  }
+
+  function renderAiError(question) {
+    aiCard.innerHTML = `
+      <div class="ai-header">
+        <span class="ai-icon">✦</span>
+        <span class="ai-title">清玄大师 · AI 解读</span>
+      </div>
+      <div class="ai-question">所问：${escHtml(question)}</div>
+      <div class="ai-error">
+        大师暂时无法连线
+        <span class="retry-link" id="aiRetryBtn">重试</span>
+      </div>
+    `;
+    $('#aiRetryBtn').addEventListener('click', () => {
+      if (lastDivineResult && lastQuestion) {
+        fetchAiInterpretation(lastDivineResult, lastQuestion);
+      }
+    });
+  }
+
+  function escHtml(s) {
+    const d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
   }
 
   // ========== 页面切换 ==========
@@ -124,11 +223,15 @@
 
   function goHome() {
     charInput.value = '';
+    questionInput.value = '';
     currentChar = '';
     currentStroke = null;
+    lastDivineResult = null;
+    lastQuestion = '';
     strokeBadge.textContent = '笔画：-';
     strokeBadge.classList.remove('found');
     strokeManual.classList.remove('show');
+    aiCard.style.display = 'none';
     btnDivine.disabled = true;
     showScreen('screen-home');
     updateShichen();
@@ -138,26 +241,19 @@
   function renderResult(r) {
     const interp = HEXAGRAM_INTERP[`${r.benGua.upperNum},${r.benGua.lowerNum}`] || {};
 
-    // 顶部信息
     $('#resultChar').textContent = currentChar;
     $('#resultMeta').textContent = `笔画 ${r.strokeCount} · ${r.shichen.name}时 · 动爻第${r.yaoPos}爻`;
 
-    // 卦象图形
     renderHexagramDisplay(r);
-
-    // 运势
     renderLuck(interp, r);
-
-    // 卦辞象辞
     renderGuaci(interp);
-
-    // 体用分析
     renderTiyong(r);
 
-    // 总结
-    renderSummary(interp);
+    if (!lastQuestion) {
+      aiCard.style.display = 'none';
+    }
 
-    // 分类解读
+    renderSummary(interp);
     renderInterpGrid(interp);
   }
 

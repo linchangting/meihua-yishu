@@ -35,6 +35,10 @@
           <input type="number" id="manualStroke" min="1" max="64" placeholder="?" />
         </div>
 
+        <div class="question-wrap">
+          <textarea class="question-input" id="questionInput" rows="2" maxlength="100" placeholder="描述你想问的事，如"明天面试顺利吗"（选填，填写后AI大师为你专属解读）"></textarea>
+        </div>
+
         <div class="shichen-info">
           <span>当前时辰</span>
           <span class="val" id="shichenDisplay">--</span>
@@ -75,6 +79,9 @@
 
       <!-- 体用分析 -->
       <div class="tiyong-card fade-in" id="tiyongCard"></div>
+
+      <!-- AI 大师解读 -->
+      <div class="ai-card fade-in" id="aiCard" style="display:none"></div>
 
       <!-- 总结 -->
       <div class="summary-card fade-in" id="summaryCard"></div>

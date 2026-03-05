@@ -167,6 +167,34 @@ body::before {
 
 .stroke-manual.show { display: flex; }
 
+.question-wrap {
+  margin-bottom: 16px;
+}
+
+.question-input {
+  width: 100%;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--text-primary);
+  resize: none;
+  outline: none;
+  line-height: 1.6;
+  transition: border-color 0.3s;
+}
+
+.question-input::placeholder {
+  color: var(--text-dim);
+  font-size: 12px;
+}
+
+.question-input:focus {
+  border-color: var(--gold-dim);
+}
+
 .stroke-manual input {
   width: 50px;
   background: rgba(255,255,255,0.06);
@@ -553,6 +581,99 @@ body::before {
   font-size: 12px;
   color: var(--text-secondary);
   line-height: 1.6;
+}
+
+/* AI 大师解读 */
+.ai-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(201,168,92,0.25);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin: 16px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.ai-card .ai-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.ai-card .ai-icon {
+  font-size: 18px;
+}
+
+.ai-card .ai-title {
+  font-size: 14px;
+  color: var(--gold);
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.ai-card .ai-question {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.ai-card .ai-body {
+  font-size: 14px;
+  color: var(--text-primary);
+  line-height: 2;
+  white-space: pre-wrap;
+}
+
+.ai-card .ai-body .section-label {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.ai-card .ai-note {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 14px;
+  text-align: right;
+}
+
+.ai-loading {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.ai-loading .dots {
+  display: inline-block;
+  animation: pulse 1.5s ease-in-out infinite;
+  color: var(--gold-dim);
+  font-size: 14px;
+  letter-spacing: 2px;
+}
+
+.ai-error {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 13px;
+  padding: 10px 0;
+}
+
+.ai-error .retry-link {
+  color: var(--gold-dim);
+  text-decoration: underline;
+  cursor: pointer;
+  margin-left: 4px;
 }
 
 /* 总结建议 */
