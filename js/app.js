@@ -306,11 +306,15 @@
 
   function renderGuaci(interp) {
     const sec = $('#guaciSection');
+    const gPlain = interp.guaciPlain ? `<div class="text-plain">${interp.guaciPlain}</div>` : '';
+    const iPlain = interp.imagePlain ? `<div class="text-plain">${interp.imagePlain}</div>` : '';
     sec.innerHTML = `
       <div class="title">【卦辞】</div>
       <div class="text">${interp.guaci || '-'}</div>
+      ${gPlain}
       <div class="title" style="margin-top:12px">【象曰】</div>
       <div class="text">${interp.image || '-'}</div>
+      ${iPlain}
     `;
   }
 
