@@ -130,12 +130,12 @@
     aiCard.style.display = 'block';
     aiCard.innerHTML = `
       <div class="ai-header">
-        <span class="ai-icon">✦</span>
-        <span class="ai-title">清玄大师 · AI 解读</span>
+        <span class="ai-icon">卜</span>
+        <span class="ai-title">小师傅 · 解读</span>
       </div>
       <div class="ai-question">所问：${escHtml(question)}</div>
       <div class="ai-loading">
-        <div class="dots">大师正在凝神解卦…</div>
+        <div class="dots">小师傅正在凝神解卦…</div>
       </div>
     `;
 
@@ -180,24 +180,24 @@
 
     aiCard.innerHTML = `
       <div class="ai-header">
-        <span class="ai-icon">✦</span>
-        <span class="ai-title">清玄大师 · AI 解读</span>
+        <span class="ai-icon">卜</span>
+        <span class="ai-title">小师傅 · 解读</span>
       </div>
       <div class="ai-question">所问：${escHtml(question)}</div>
       <div class="ai-body">${formatted}</div>
-      <div class="ai-note">基于卦象与您的问题，由 AI 生成</div>
+      <div class="ai-note">基于卦象与您的问题生成</div>
     `;
   }
 
   function renderAiError(question) {
     aiCard.innerHTML = `
       <div class="ai-header">
-        <span class="ai-icon">✦</span>
-        <span class="ai-title">清玄大师 · AI 解读</span>
+        <span class="ai-icon">卜</span>
+        <span class="ai-title">小师傅 · 解读</span>
       </div>
       <div class="ai-question">所问：${escHtml(question)}</div>
       <div class="ai-error">
-        大师暂时无法连线
+        小师傅暂时无法连线
         <span class="retry-link" id="aiRetryBtn">重试</span>
       </div>
     `;
@@ -349,10 +349,10 @@
   function renderInterpGrid(interp) {
     const grid = $('#interpGrid');
     const items = [
-      { icon: '💼', cat: '事业', desc: interp.career },
-      { icon: '❤️', cat: '感情', desc: interp.love },
-      { icon: '💰', cat: '财运', desc: interp.wealth },
-      { icon: '🏥', cat: '健康', desc: interp.health },
+      { icon: '业', cat: '事业', desc: interp.career },
+      { icon: '缘', cat: '感情', desc: interp.love },
+      { icon: '财', cat: '财运', desc: interp.wealth },
+      { icon: '安', cat: '健康', desc: interp.health },
     ];
     grid.innerHTML = items.map(it => `
       <div class="interp-item">
